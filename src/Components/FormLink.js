@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import ReactModal from "react-modal";
+import swal from "sweetalert";
+import searchIcon from "../Images/search-icon.jpg";
+import InputBlock from "./InputBlock";
 
 export default function FormLink(props) {
   const [firstTitle, setFirstTitle] = useState("");
   const [lastTitle, setLastTitle] = useState("");
   const [firstSuggestion, setFirstSuggestion] = useState([]);
   const [lastSuggestion, setLastSuggestion] = useState([]);
-  const [error, setError] = useState("");
 
   const searchWiki = async (title) => {
     try {
@@ -34,91 +35,58 @@ export default function FormLink(props) {
         searchWiki(lastTitle),
       ]);
 
-      if (firstRes.length === 0) {
-        setError("First Title is Invalid");
+      if (firstRes.length === 0 && lastRes.length === 0) {
+        swal("Error", "Both First and Last Titles are Invalid", "error");
       } else {
-        props.setValidFirst(firstTitle);
-      }
+        if (firstRes.length === 0) {
+          swal("Error", "First Title is Invalid", "error");
+        } else {
+          props.setValidFirst(firstTitle);
+        }
 
-      if (lastRes.length === 0) {
-        setError((err) =>
-          err==="" ? "Last Title is Invalid" : `${err} and Last Title is Invalid`
-        );
-      } else {
-        props.setValidLast(lastTitle);
+        if (lastRes.length === 0) {
+          swal("Error", "Last Title is Invalid", "error");
+        } else {
+          props.setValidLast(lastTitle);
+        }
       }
     } catch (error) {
       console.error("Error occurred during search:", error);
-      setError("An error occurred while searching. Please try again.");
+      swal(
+        "Error",
+        "An error occurred while searching. Please try again.",
+        "error"
+      );
     }
   };
 
   return (
-    <form className="flex justify-center" onSubmit={handleSubmit}>
-      <div className="relative">
-        <label htmlFor="firstLink">Starting Title</label>
-        <input
-          type="text"
-          id="firstLink"
-          name="firstLink"
-          value={firstTitle}
-          onChange={(e) => {
-            setFirstTitle(e.target.value);
-            searchWiki(e.target.value).then((res) => setFirstSuggestion(res));
-          }}
-          className="border-black border-2 relative"
+    <form className="text-center" onSubmit={handleSubmit}>
+      <div className="flex justify-center h-40 text-left gap-10">
+        <InputBlock 
+          searchWiki= {searchWiki}
+          title= {firstTitle}
+          setTitle={setFirstTitle}
+          suggestion={firstSuggestion}
+          setSuggestion={setFirstSuggestion}
+          first= {true}
         />
-        {firstSuggestion.length !== 0 && (
-          <ul className="absolute top-8 left-12">
-            {firstSuggestion.map((item) => {
-              return (
-                <li
-                  key={item}
-                  onClick={() => {
-                    setFirstTitle(item);
-                    setFirstSuggestion([]);
-                  }}
-                >
-                  {item}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-      <div className="relative">
-        <label htmlFor="lastLink">End Title</label>
-        <input
-          type="text"
-          id="start"
-          name="lastLink"
-          value={lastTitle}
-          onChange={(e) => {
-            setLastTitle(e.target.value);
-            searchWiki(e.target.value).then((res) => setLastSuggestion(res));
-          }}
-          className="border-black border-2"
+        <InputBlock 
+          searchWiki= {searchWiki}
+          title= {lastTitle}
+          setTitle={setLastTitle}
+          suggestion={lastSuggestion}
+          setSuggestion={setLastSuggestion}
+          first={false}
         />
-        {lastSuggestion.length !== 0 && (
-          <ul className="absolute top-8 left-12">
-            {lastSuggestion.map((item) => {
-              return (
-                <li
-                  key={item}
-                  onClick={() => {
-                    setLastTitle(item);
-                    setLastSuggestion([]);
-                  }}
-                >
-                  {item}
-                </li>
-              );
-            })}
-          </ul>
-        )}
       </div>
-      <button type="submit">Submit</button>
-
+      <button 
+        type="submit"
+        className="mt-20 text-xl bg-gray-400 w-28 h-16 rounded-xl 
+        hover:bg-gray-700 hover:text-gray-200
+        hover:cursor-pointer"
+      >
+        Submit</button>
     </form>
   );
 }

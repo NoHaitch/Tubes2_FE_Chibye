@@ -1,4 +1,11 @@
 
 @tailwind base;
+
+body{
+    background-image: url("./Images/wiki.png");
+    background-repeat: no-repeat;
+    background-position: 50% 5%;
+}
+
 @tailwind components;
 @tailwind utilities;
