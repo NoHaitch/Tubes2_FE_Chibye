@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./Components/Header";
+import FormLink from "./Components/FormLink";
+import { useState } from "react";
 
 function App() {
+  const [validFirstTitle,setValidFirstTitle] = useState("");
+  const [validLastTitle,setValidLastTitle] = useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+
+      <h1 className="text-center text-5xl">
+        WikiRace
+      </h1>
+
+      <h2 className="text-center text-2xl">
+        Find the Shortest Path from One Link to Another
+      </h2>
+      {validFirstTitle==="" ? 
+        <FormLink 
+          setValidFirst={setValidFirstTitle}
+          setValidLast={setValidLastTitle}
+          />
+        :(
+        <h1>kontol</h1>
+        )}
     </div>
   );
 }
