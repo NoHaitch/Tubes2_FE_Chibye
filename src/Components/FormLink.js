@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import swal from "sweetalert";
-import searchIcon from "../Images/search-icon.jpg";
 import InputBlock from "./InputBlock";
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import { Stack } from "@mui/material";
 
 export default function FormLink(props) {
   const [firstTitle, setFirstTitle] = useState("");
   const [lastTitle, setLastTitle] = useState("");
-  const [firstSuggestion, setFirstSuggestion] = useState([]);
-  const [lastSuggestion, setLastSuggestion] = useState([]);
 
   const searchWiki = async (title) => {
     try {
@@ -22,7 +22,7 @@ export default function FormLink(props) {
       const jsonArr = jsonData.query.search;
       return jsonArr.map((item) => item.title);
     } catch (error) {
-      console.error("Error occurred while searching:", error);
+      console.error(error);
       return [];
     }
   };
@@ -41,13 +41,13 @@ export default function FormLink(props) {
         if (firstRes.length === 0) {
           swal("Error", "First Title is Invalid", "error");
         } else {
-          props.setValidFirst(firstTitle);
+          props.setValidFirst(firstTitle.replace(new RegExp(" ", "g"), "_"));
         }
 
         if (lastRes.length === 0) {
           swal("Error", "Last Title is Invalid", "error");
         } else {
-          props.setValidLast(lastTitle);
+          props.setValidLast(lastTitle.replace(new RegExp(" ", "g"), "_"));
         }
       }
     } catch (error) {
@@ -61,32 +61,35 @@ export default function FormLink(props) {
   };
 
   return (
-    <form className="text-center" onSubmit={handleSubmit}>
-      <div className="flex justify-center h-40 text-left gap-10">
+    <form onSubmit={handleSubmit}>
+      <div className="flex justify-center h-32 text-left gap-10">
         <InputBlock 
           searchWiki= {searchWiki}
-          title= {firstTitle}
+          Title = {firstTitle}
           setTitle={setFirstTitle}
-          suggestion={firstSuggestion}
-          setSuggestion={setFirstSuggestion}
           first= {true}
         />
         <InputBlock 
           searchWiki= {searchWiki}
-          title= {lastTitle}
+          Title={lastTitle}
           setTitle={setLastTitle}
-          suggestion={lastSuggestion}
-          setSuggestion={setLastSuggestion}
           first={false}
         />
       </div>
-      <button 
-        type="submit"
-        className="mt-20 text-xl bg-gray-400 w-28 h-16 rounded-xl 
-        hover:bg-gray-700 hover:text-gray-200
-        hover:cursor-pointer"
-      >
-        Submit</button>
+      <div className="flex flex-col items-center">
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography>BFS</Typography>
+          <Switch inputProps={{ 'aria-label': 'ant design' }} />
+          <Typography>IDS</Typography>
+        </Stack>
+        <button 
+          type="submit"
+          className="text-xl bg-gray-400 w-28 h-16 rounded-xl 
+          hover:bg-gray-700 hover:text-gray-200
+          hover:cursor-pointer"
+        >
+          Search</button>
+      </div>
     </form>
   );
 }

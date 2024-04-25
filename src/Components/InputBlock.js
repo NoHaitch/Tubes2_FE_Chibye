@@ -1,15 +1,21 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 export default function InputBlock({
   searchWiki,
-  title,
+  Title,
   setTitle,
-  suggestion,
-  setSuggestion,
   first,
 }) {
+  const [title,setTitlee] = useState("")
+  const [suggestion,setSuggestion] = useState([])
+
+  const [debouncedTitle] = useDebounce(title,300);
+  useEffect(()=>{
+    searchWiki(debouncedTitle)
+      .then(res => setSuggestion(res))
+  },[debouncedTitle])
   return (
-    <div>
+    <div className=" w-full max-w-2xl">
       <label htmlFor="Link" className="block text-xl mb-2">
         {first?"Starting":"End"} Title
       </label>
@@ -17,16 +23,17 @@ export default function InputBlock({
         type="text"
         id="Link"
         name="Link"
-        value={title}
+        value={Title}
         onChange={(e) => {
           setTitle(e.target.value);
-          searchWiki(e.target.value).then((res) => setSuggestion(res));
+          setTitlee(e.target.value)
         }}
-        className="border-black border-2 rounded h-8 w-60"
+        className="border-black border-2 rounded h-12 w-full indent-2"
         placeholder="Title..."
       />
       {suggestion.length !== 0 && (
-        <ul className="overflow-y-scroll overflow-x-hidden h-28 w-60">
+        <ul className="overflow-y-auto overflow-x-hidden max-h-40 bg-gray-300 relative z-10
+        border-solid border-black border-2">
           {suggestion.map((item) => {
             return (
               <li

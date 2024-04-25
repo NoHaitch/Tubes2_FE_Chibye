@@ -1,6 +1,7 @@
 import Header from "./Components/Header";
 import FormLink from "./Components/FormLink";
 import { useState } from "react";
+import Graph from "./Components/Graph";
 
 function App() {
   const [validFirstTitle, setValidFirstTitle] = useState("");
@@ -9,21 +10,21 @@ function App() {
   return (
     <div style={{ fontFamily: "Roboto Mono" }}>
       <Header />
-      <div className="py-20 mt-16 bg-gray-100 bg-opacity-70 flex flex-col items-center">
-        <div className="bg-gray-200 w-110 text-center p-8 rounded-2xl">
-          <h1 className="text-5xl">WikiRace</h1>
+      <div className="py-10 mt-5 flex flex-col items-center">
+        <div className="shadow-2xl bg-gray-200 bg-opacity-80 w-3/4 text-center p-8 rounded-2xl">
+          <h1 className="text-5xl font-bold">WikiRace</h1>
           <br></br>
-          <h2 className="text-2xl mb-20 mt-3">
+          <h2 className="text-2xl mb-20 mt-3 italic font-semibold">
             Find the Shortest Path from One Link to Another
           </h2>
-          {validFirstTitle === "" || validLastTitle === "" ? (
-            <FormLink
-              setValidFirst={setValidFirstTitle}
-              setValidLast={setValidLastTitle}
-            />
-          ) : (
-            <h1>kontol</h1>
-          )}
+          <FormLink
+            setValidFirst={setValidFirstTitle}
+            setValidLast={setValidLastTitle}
+          />
+          <Graph
+            firstTitle={validFirstTitle}
+            lastTitle={validLastTitle}
+          />     
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ body{
     background-image: url("./Images/wiki.png");
     background-repeat: no-repeat;
     background-position: 50% 5%;
+    background-color: rbga(236,236,236);
 }
 
 @tailwind components;
