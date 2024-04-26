@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import { zoom } from "d3-zoom";
 
 export default function Graph({ firstTitle, lastTitle, isBFS }) {
   const svgRef = useRef(null);
@@ -8,13 +7,13 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
   const [results, setResults] = useState([]);
   const [hops, setHops] = useState(0);
   const [pageChecked, setPageChecked] = useState(0);
+
   useEffect(() => {
     if (firstTitle !== "") {
       setResults([])
       const url = isBFS
         ? `http://localhost:8080/bfs?source=${firstTitle}&target=${lastTitle}`
         : `http://localhost:8080/ids?source=${firstTitle}&target=${lastTitle}`;
-        console.log(url)
       try {
         fetch(url)
           .then((res) => res.json())
@@ -95,8 +94,26 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       });
     }
 
+    const drag = d3
+    .drag()
+    .on("start", (event, d) => {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    })
+    .on("drag", (event, d) => {
+      d.fx = event.x;
+      d.fy = event.y;
+    })
+    .on("end", (event, d) => {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    });
+
     svg
       .selectAll(".node")
+      .call(drag)
       .data(nodes)
       .enter()
       .append("circle")
@@ -142,16 +159,11 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       .attr("marker-end", "url(#arrowhead)");
 
     simulation.force("link").links(links);
-    const zoomBehavior = zoom().on("zoom", (event) => {
-      svg.attr("transform", event.transform);
-    });
-
-    svg.call(zoomBehavior);
   };
 
   return (
     <div className="flex flex-col items-center mt-5">
-      {setGraph()}
+      {firstTitle!=="" && setGraph()}
       {results.length !== 0 ? (
         <div className="font-bold mb-5">
           <h3>Found a path with {hops} degrees of separation</h3>
@@ -161,7 +173,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
             seconds
           </h3>
         </div>
-      ) : (
+      ) : ( firstTitle!=="" &&
           <div
             className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid 
             border-current border-r-transparent align-[-0.125em] 
