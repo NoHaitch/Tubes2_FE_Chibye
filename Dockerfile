@@ -1,5 +1,5 @@
-# Use Node.js LTS version as the base image
-FROM node:lts-alpine as build
+# Use an official Node runtime as a base image
+FROM node:latest
 
 # Set the working directory in the container
 WORKDIR /app
@@ -13,17 +13,8 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Build the React app
-RUN npm run build
+# Expose port 3000 to the outside world
+EXPOSE 3000
 
-# Use Nginx as the base image for serving the React app
-FROM nginx:alpine
-
-# Copy the built React app from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Command to run the application
+CMD ["npm", "start"]
