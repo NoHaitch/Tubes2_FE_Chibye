@@ -21,14 +21,12 @@ function App() {
             setValidFirst={setValidFirstTitle}
             setValidLast={setValidLastTitle}
             setValidBFS={setValidBFS}
-          />
-          {validFirstTitle !== "" && (
+          /> 
             <Graph
               firstTitle={validFirstTitle}
               lastTitle={validLastTitle}
               isBFS={validBFS}
             />
-          )}
         </div>
       </div>
     </div>
