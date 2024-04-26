@@ -11,8 +11,10 @@ export default function InputBlock({
 
   const [debouncedTitle] = useDebounce(title,300);
   useEffect(()=>{
-    searchWiki(debouncedTitle)
-      .then(res => setSuggestion(res))
+    if(debouncedTitle!==""){
+      searchWiki(debouncedTitle)
+        .then(res => setSuggestion(res))
+    }
   },[debouncedTitle])
   return (
     <div className=" w-full max-w-2xl">

@@ -79,7 +79,12 @@ export default function FormLink(props) {
       <div className="flex flex-col items-center">
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography>BFS</Typography>
-          <Switch inputProps={{ 'aria-label': 'ant design' }} />
+          <Switch 
+            inputProps={{ 'aria-label': 'ant design' }} 
+            onChange={()=>{
+              props.setValidBFS(n => !n)
+            }}
+          />
           <Typography>IDS</Typography>
         </Stack>
         <button 

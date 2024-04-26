@@ -6,11 +6,12 @@ import Graph from "./Components/Graph";
 function App() {
   const [validFirstTitle, setValidFirstTitle] = useState("");
   const [validLastTitle, setValidLastTitle] = useState("");
+  const [validBFS,setBFS] = useState(true)
 
   return (
     <div style={{ fontFamily: "Roboto Mono" }}>
       <Header />
-      <div className="py-10 mt-5 flex flex-col items-center">
+      <div className="pb-10 mt-5 flex flex-col items-center">
         <div className="shadow-2xl bg-gray-200 bg-opacity-80 w-3/4 text-center p-8 rounded-2xl">
           <h1 className="text-5xl font-bold">WikiRace</h1>
           <br></br>
@@ -20,10 +21,12 @@ function App() {
           <FormLink
             setValidFirst={setValidFirstTitle}
             setValidLast={setValidLastTitle}
+            setValidBFS={setBFS}
           />
           <Graph
             firstTitle={validFirstTitle}
             lastTitle={validLastTitle}
+            isBFS={validBFS}
           />     
         </div>
       </div>
