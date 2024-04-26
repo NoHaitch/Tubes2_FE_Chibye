@@ -6,8 +6,7 @@ import Graph from "./Components/Graph";
 function App() {
   const [validFirstTitle, setValidFirstTitle] = useState("");
   const [validLastTitle, setValidLastTitle] = useState("");
-  const [validBFS,setBFS] = useState(true)
-
+  const [validBFS, setValidBFS] = useState(true);
   return (
     <div style={{ fontFamily: "Roboto Mono" }}>
       <Header />
@@ -21,13 +20,15 @@ function App() {
           <FormLink
             setValidFirst={setValidFirstTitle}
             setValidLast={setValidLastTitle}
-            setValidBFS={setBFS}
+            setValidBFS={setValidBFS}
           />
-          <Graph
-            firstTitle={validFirstTitle}
-            lastTitle={validLastTitle}
-            isBFS={validBFS}
-          />     
+          {validFirstTitle !== "" && (
+            <Graph
+              firstTitle={validFirstTitle}
+              lastTitle={validLastTitle}
+              isBFS={validBFS}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -32,6 +32,7 @@ export default function InputBlock({
         }}
         className="border-black border-2 rounded h-12 w-full indent-2"
         placeholder="Title..."
+        autoComplete="off"
       />
       {suggestion.length !== 0 && (
         <ul className="overflow-y-auto overflow-x-hidden max-h-40 bg-gray-300 relative z-10

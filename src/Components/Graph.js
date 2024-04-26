@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { zoom } from "d3-zoom";
 
 export default function Graph({ firstTitle, lastTitle, isBFS }) {
   const svgRef = useRef(null);
@@ -7,20 +8,19 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
   const [results, setResults] = useState([]);
   const [hops, setHops] = useState(0);
   const [pageChecked, setPageChecked] = useState(0);
-  console.log(results);
   useEffect(() => {
     if (firstTitle !== "") {
+      setResults([])
       const url = isBFS
         ? `http://localhost:8080/bfs?source=${firstTitle}&target=${lastTitle}`
         : `http://localhost:8080/ids?source=${firstTitle}&target=${lastTitle}`;
-      console.log(url);
+        console.log(url)
       try {
         fetch(url)
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             setResults(data.results);
-            setTimeTaken(data.timeTakken);
+            setTimeTaken(data.timeTaken);
             setHops(data.hops);
             setPageChecked(data.pageChecked);
           });
@@ -28,7 +28,6 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
         console.log(error);
       }
     }
-    console.log("kontol");
   }, [firstTitle, lastTitle, isBFS]);
 
   const setGraph = () => {
@@ -49,6 +48,8 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       width = 600;
     }
 
+    const radius = Math.min(width, height) * 0.03;
+    const linkLength = Math.min(width,height)*0.5;
     const svg = d3
       .select(svgRef.current)
       .attr("width", width)
@@ -63,7 +64,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
         d3
           .forceLink()
           .id((d) => d.id)
-          .distance(200)
+          .distance(linkLength)
       )
       .on("tick", () => {
         svg
@@ -100,7 +101,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       .enter()
       .append("circle")
       .attr("class", "node")
-      .attr("r", 15)
+      .attr("r", radius)
       .on("click", (event, d) => {
         window.open(d.url, "_blank");
       });
@@ -111,8 +112,9 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       .append("text")
       .attr("class", "label")
       .attr("text-anchor", "middle")
-      .attr("dy", -30)
+      .attr("dy", -20)
       .attr("fill", "black")
+      .style("font-size",`${radius*1.5}px`)
       .text((d) => d.id);
 
     svg
@@ -140,17 +142,37 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       .attr("marker-end", "url(#arrowhead)");
 
     simulation.force("link").links(links);
+    const zoomBehavior = zoom().on("zoom", (event) => {
+      svg.attr("transform", event.transform);
+    });
+
+    svg.call(zoomBehavior);
   };
 
   return (
     <div className="flex flex-col items-center mt-5">
       {setGraph()}
-      {results.length!==0 && 
+      {results.length !== 0 ? (
         <div className="font-bold mb-5">
           <h3>Found a path with {hops} degrees of separation</h3>
-          <h3>from <span>{firstTitle.replace(new RegExp("_", "g"), " ")}</span> to {lastTitle.replace(new RegExp("_", "g"), " ")} in {timeTaken/1000} seconds</h3>
+          <h3>
+            from <span>{firstTitle.replace(new RegExp("_", "g"), " ")}</span> to{" "}
+            {lastTitle.replace(new RegExp("_", "g"), " ")} in {timeTaken / 1000}{" "}
+            seconds
+          </h3>
         </div>
-      }
+      ) : (
+          <div
+            className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid 
+            border-current border-r-transparent align-[-0.125em] 
+            motion-reduce:animate-[spin_1.5s_linear_infinite] mt-5"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+      )}
       <svg ref={svgRef}></svg>
     </div>
   );

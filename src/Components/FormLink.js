@@ -8,7 +8,7 @@ import { Stack } from "@mui/material";
 export default function FormLink(props) {
   const [firstTitle, setFirstTitle] = useState("");
   const [lastTitle, setLastTitle] = useState("");
-
+  const [bfs,setBFS] = useState(true)
   const searchWiki = async (title) => {
     try {
       const titleReq = title.replace(new RegExp(" ", "g"), "_");
@@ -34,20 +34,23 @@ export default function FormLink(props) {
         searchWiki(firstTitle),
         searchWiki(lastTitle),
       ]);
-
       if (firstRes.length === 0 && lastRes.length === 0) {
         swal("Error", "Both First and Last Titles are Invalid", "error");
       } else {
         if (firstRes.length === 0) {
           swal("Error", "First Title is Invalid", "error");
         } else {
-          props.setValidFirst(firstTitle.replace(new RegExp(" ", "g"), "_"));
-        }
-
-        if (lastRes.length === 0) {
-          swal("Error", "Last Title is Invalid", "error");
-        } else {
-          props.setValidLast(lastTitle.replace(new RegExp(" ", "g"), "_"));
+          if (lastRes.length === 0) {
+            swal("Error", "Last Title is Invalid", "error");
+          } else {
+            if(firstTitle.localeCompare(lastTitle)===0){
+              swal("Error", "Both First and Last Titles are the same", "error");
+            }else{
+              props.setValidFirst(firstTitle.replace(new RegExp(" ", "g"), "_"));
+              props.setValidLast(lastTitle.replace(new RegExp(" ", "g"), "_"));
+              props.setValidBFS(bfs)
+            }
+          }
         }
       }
     } catch (error) {
@@ -82,7 +85,7 @@ export default function FormLink(props) {
           <Switch 
             inputProps={{ 'aria-label': 'ant design' }} 
             onChange={()=>{
-              props.setValidBFS(n => !n)
+              setBFS(!bfs)
             }}
           />
           <Typography>IDS</Typography>
