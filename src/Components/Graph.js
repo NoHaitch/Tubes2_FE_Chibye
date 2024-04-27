@@ -10,7 +10,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
 
   useEffect(() => {
     if (firstTitle !== "") {
-      setResults([])
+      setResults([]);
       const url = isBFS
         ? `http://localhost:8080/bfs?source=${firstTitle}&target=${lastTitle}`
         : `http://localhost:8080/ids?source=${firstTitle}&target=${lastTitle}`;
@@ -48,7 +48,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
     }
 
     const radius = Math.min(width, height) * 0.03;
-    const linkLength = Math.min(width,height)*0.5;
+    const linkLength = Math.min(width, height) * 0.5;
     const svg = d3
       .select(svgRef.current)
       .attr("width", width)
@@ -95,30 +95,33 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
     }
 
     const drag = d3
-    .drag()
-    .on("start", (event, d) => {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    })
-    .on("drag", (event, d) => {
-      d.fx = event.x;
-      d.fy = event.y;
-    })
-    .on("end", (event, d) => {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    });
+      .drag()
+      .on("start", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on("drag", (event, d) => {
+        const x = event.x;
+        const y = event.y;
+
+        d.fx = Math.max(radius, Math.min(width - radius, x));
+        d.fy = Math.max(radius, Math.min(height - radius, y));
+      })
+      .on("end", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      });
 
     svg
       .selectAll(".node")
-      .call(drag)
       .data(nodes)
       .enter()
       .append("circle")
       .attr("class", "node")
       .attr("r", radius)
+      .call(drag)
       .on("click", (event, d) => {
         window.open(d.url, "_blank");
       });
@@ -131,7 +134,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       .attr("text-anchor", "middle")
       .attr("dy", -20)
       .attr("fill", "black")
-      .style("font-size",`${radius*1.5}px`)
+      .style("font-size", `${radius * 1.5}px`)
       .text((d) => d.id);
 
     svg
@@ -162,8 +165,8 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
   };
 
   return (
-    <div className="flex flex-col items-center mt-5">
-      {firstTitle!=="" && setGraph()}
+    <div className="flex flex-col items-center mt-5 ">
+      {firstTitle !== "" && setGraph()}
       {results.length !== 0 ? (
         <div className="font-bold mb-5">
           <h3>Found a path with {hops} degrees of separation</h3>
@@ -172,8 +175,10 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
             {lastTitle.replace(new RegExp("_", "g"), " ")} in {timeTaken / 1000}{" "}
             seconds
           </h3>
+          <h4>Pages Checked: {pageChecked}</h4>
         </div>
-      ) : ( firstTitle!=="" &&
+      ) : (
+        firstTitle !== "" && (
           <div
             className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid 
             border-current border-r-transparent align-[-0.125em] 
@@ -184,8 +189,15 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
               Loading...
             </span>
           </div>
+        )
       )}
       <svg ref={svgRef}></svg>
+      {results.length!==0 && (
+        <>
+          <p>Drag to pan</p>
+          <p>Click Node to Open Wikipedia Page</p>
+        </>
+      )}
     </div>
   );
 }
