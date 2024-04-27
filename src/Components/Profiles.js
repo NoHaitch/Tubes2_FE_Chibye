@@ -12,7 +12,7 @@ const ProfileModal = ({ isOpen, closeModal }) => {
     fullName: "Suthasoma M. Munthe",
     shortName: "Sutha",
     nim:"13522098",
-    github:"github.com/sotul04"
+    github:"http://github.com/sotul04"
   },{
     fullName: "Ignatius J. Hezkiel Chan",
     shortName: "Kiel",
@@ -26,6 +26,7 @@ const ProfileModal = ({ isOpen, closeModal }) => {
         <h2>{item.shortName}</h2>
         <h3>{item.nim}</h3>
         <a href={item.github} className='font-semibold hover:text-white'>Github</a>
+        {console.log(item.github)}
       </div>
     )
   })
