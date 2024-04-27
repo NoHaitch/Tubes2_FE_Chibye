@@ -36,7 +36,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
     const nodes = results.map((item,index) => {
       const title = item.slice(6);
       return {
-        id: title.replace(new RegExp("_", "g"), " "),
+        id: decodeURIComponent(title.replace(new RegExp("_", "g"), " ")),
         url: `https://en.wikipedia.org${item}`,
         color: colors[index%colors.length]
       };
