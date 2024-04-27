@@ -27,14 +27,14 @@ const GitHubMenu = () => {
           onMouseEnter={openMenu}
           onMouseLeave={closeMenu}
         >
-          <a href="https://github.com/"
+          <a href="https://github.com/NoHaitch/Tubes2_FE_Chibye"
             className="cursor-pointer hover:bg-gray-200 p-1"
             onMouseEnter={openMenu}
             onMouseLeave={closeMenu}
           >
             GitHub Frontend
           </a>
-          <a href="https://github.com/"
+          <a href="https://github.com/NoHaitch/Tubes2_BE_Chibye"
             className="cursor-pointer hover:bg-gray-200 p-1"
             onMouseEnter={openMenu}
             onMouseLeave={closeMenu}
