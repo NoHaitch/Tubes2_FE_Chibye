@@ -109,7 +109,7 @@ Project dependencies
 
 ### Installation
 
-How to install and use this project_ (without docker)
+How to install and use this project (without docker)
 
 1. Clone the repo
    ```sh
@@ -125,7 +125,7 @@ How to install and use this project_ (without docker)
    ``` 
 <br>
 
-How to install and use this project_ (With docker)
+How to install and use this project (With docker)
 1. Create New Folder as the Parent for FrontEnd and BackEnd folder. Let's say Tubes2_Chibye
 2. Clone the FrontEnd repository to the Tubes2_Chibye folder.
    ```sh
