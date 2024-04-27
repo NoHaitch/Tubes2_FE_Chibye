@@ -115,7 +115,7 @@ How to install and use this project_
    ```
 2. Install node dependencies
    ```sh
-   npm i
+   npm install
    ```
 3. Run the program
    ```sh
