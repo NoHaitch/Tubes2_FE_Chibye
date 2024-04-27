@@ -1,7 +1,10 @@
-import Header from "./Components/Header";
 import FormLink from "./Components/FormLink";
 import { useState } from "react";
 import Graph from "./Components/Graph";
+import ParticlesBg from "./Components/ParticlesBg";
+import LogoImg from "./Images/the.png"
+import GitHubMenu from "./Components/GithubMenu";
+import AboutUs from "./Components/AboutUs";
 
 function App() {
   const [validFirstTitle, setValidFirstTitle] = useState("");
@@ -9,9 +12,13 @@ function App() {
   const [validBFS, setValidBFS] = useState(true);
   return (
     <div style={{ fontFamily: "Roboto Mono" }}>
-      <Header />
-      <div className="pb-10 mt-5 flex flex-col items-center">
-        <div className="shadow-2xl bg-gray-200 bg-opacity-80 w-3/4 text-center p-8 rounded-2xl">
+      <img src={LogoImg} alt="logo-img" className="h-32 top-0 left-3 absolute"/>
+      <div className="absolute right-8 text-center mt-5">
+        <GitHubMenu/>
+        <AboutUs/>
+      </div>
+      <div className="pt-8 flex flex-col items-center">
+        <div className="w-3/4 text-center p-8">
           <h1 className="text-5xl font-bold">WikiRace</h1>
           <br></br>
           <h2 className="text-2xl mb-20 mt-3 italic font-semibold">
@@ -28,6 +35,9 @@ function App() {
               isBFS={validBFS}
             />
         </div>
+      </div>
+      <div className="relative -z-10">
+        <ParticlesBg/>
       </div>
     </div>
   );

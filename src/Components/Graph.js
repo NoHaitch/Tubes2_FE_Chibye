@@ -8,6 +8,8 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
   const [hops, setHops] = useState(0);
   const [pageChecked, setPageChecked] = useState(0);
 
+  const colors = ["#C40C0C","#10439F","#41B06E","#DD5746","#135D66","#8644A2","#9B3922"]
+
   useEffect(() => {
     if (firstTitle !== "") {
       setResults([]);
@@ -31,11 +33,12 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
 
   const setGraph = () => {
     d3.select(svgRef.current).selectAll("*").remove();
-    const nodes = results.map((item) => {
+    const nodes = results.map((item,index) => {
       const title = item.slice(6);
       return {
         id: title.replace(new RegExp("_", "g"), " "),
         url: `https://en.wikipedia.org${item}`,
+        color: colors[index%colors.length]
       };
     });
 
@@ -122,6 +125,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
       .attr("class", "node")
       .attr("r", radius)
       .call(drag)
+      .style("fill",(d)=>d.color)
       .on("click", (event, d) => {
         window.open(d.url, "_blank");
       });
@@ -168,7 +172,7 @@ export default function Graph({ firstTitle, lastTitle, isBFS }) {
     <div className="flex flex-col items-center mt-5 ">
       {firstTitle !== "" && setGraph()}
       {results.length !== 0 ? (
-        <div className="font-bold mb-5">
+        <div className="font-bold mb-5 text-xl">
           <h3>Found a path with {hops} degrees of separation</h3>
           <h3>
             from <span>{firstTitle.replace(new RegExp("_", "g"), " ")}</span> to{" "}

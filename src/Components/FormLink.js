@@ -92,11 +92,11 @@ export default function FormLink(props) {
         </Stack>
         <button 
           type="submit"
-          className="text-xl bg-gray-400 w-28 h-16 rounded-xl 
+          className="text-xl bg-gray-200 w-32 h-16 mt-2 rounded-lg
           hover:bg-gray-700 hover:text-gray-200
           hover:cursor-pointer"
         >
-          Search</button>
+          Search!</button>
       </div>
     </form>
   );
