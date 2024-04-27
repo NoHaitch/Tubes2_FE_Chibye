@@ -103,11 +103,6 @@ Project dependencies
 * Node
   You can find Node here: https://nodejs.org/en/learn/getting-started/how-to-install-nodejs 
 
-Golang library used:
-- [gocolly](https://go-colly.org/)
-- [gin](https://gin-gonic.com/)
-
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installation
@@ -124,7 +119,7 @@ How to install and use this project_
    ```
 3. Run the program
    ```sh
-   npm run start
+   npm start
    ``` 
 
 
